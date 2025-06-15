@@ -40,7 +40,9 @@ public class AuthService {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
+        System.out.println("User created: " + user.toString());
         userRepository.save(user);
+
         String token = jwtTokenProvider.generateToken(user);
 
         return new AuthResponse(token, user.getRole().name());

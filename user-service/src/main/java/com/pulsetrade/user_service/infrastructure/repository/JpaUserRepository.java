@@ -23,11 +23,11 @@ public class JpaUserRepository implements IUserRepository {
 
     @Override
     public User save(User user) {
-        return null;
+        return springRepo.save(user);
     }
 
     @Override
     public Optional<User> findById(UUID id) {
-        return Optional.empty();
+        return springRepo.findById(id);
     }
 }
