@@ -2,10 +2,8 @@ package com.pulsetrade.user_service.application.service;
 
 import com.pulsetrade.user_service.api.dto.UserProfileRequest;
 import com.pulsetrade.user_service.api.dto.UserProfileResponse;
-import com.pulsetrade.user_service.domain.model.User;
 import com.pulsetrade.user_service.domain.model.UserProfile;
-import com.pulsetrade.user_service.infrastructure.repository.SpringUserJpaRepository;
-import com.pulsetrade.user_service.infrastructure.repository.UserProfileRepository;
+import com.pulsetrade.user_service.domain.repository.IUserProfileRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -13,33 +11,36 @@ import java.util.UUID;
 @Service
 public class UserProfileService {
 
-    private final SpringUserJpaRepository userRepo;
-    private final UserProfileRepository profileRepo;
+    private final IUserProfileRepository profileRepo;
 
-    public UserProfileService(SpringUserJpaRepository userRepo, UserProfileRepository profileRepo) {
-        this.userRepo = userRepo;
-        this.profileRepo = profileRepo;
+    public UserProfileService(IUserProfileRepository profileRepository) {
+        this.profileRepo = profileRepository;
     }
 
-    public UserProfileResponse getProfile(UUID userId){
 
+    public UserProfileResponse getProfile(UUID userId) {
         UserProfile profile = profileRepo.findByUserId(userId)
-                .orElseThrow(()-> new RuntimeException("Profile not found"));
+                .orElseThrow(() -> new RuntimeException("User profile not found"));
 
-        return new UserProfileResponse(profile.getPhoneNumber(), profile.getAvatarUrl(), profile.getBio());
+        return new UserProfileResponse(
+                profile.getDisplayName(),
+                profile.getPhoneNumber(),
+                profile.getProfileImageUrl(),
+                profile.getLocation(),
+                profile.getBio()
+        );
     }
 
-    public void updateProfile(UUID userId, UserProfileRequest request){
 
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
+    public void updateProfile(UUID userId, UserProfileRequest request) {
         UserProfile profile = profileRepo.findByUserId(userId)
-                .orElse( new UserProfile(user,"","",""));
+                .orElse(new UserProfile(userId, "", "", "", "", ""));
 
-        profile.setPhoneNumber(request.getPhoneNumber());
-        profile.setAvatarUrl(request.getAvatarUrl());
+        profile.setDisplayName(request.getDisplayName());
         profile.setBio(request.getBio());
+        profile.setLocation(request.getLocation());
+        profile.setProfileImageUrl(request.getProfileImageUrl());
+        profile.setPhoneNumber(request.getPhoneNumber());
 
         profileRepo.save(profile);
     }

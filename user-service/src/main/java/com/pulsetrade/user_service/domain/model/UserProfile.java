@@ -5,37 +5,25 @@ import lombok.*;
 
 import java.util.UUID;
 
-@Entity
-@Table(name = "user_profiles")
-@Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter
 public class UserProfile {
 
-    @Id
-    private UUID id;
-
-    @OneToOne
-    @MapsId
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @Column(name = "phone_number")
+    // Getters and setters
+    private UUID userId;
+    private String displayName;
     private String phoneNumber;
-
-    @Column(name = "avatar_url")
-    private String avatarUrl;
-
-    @Column(name = "bio")
     private String bio;
+    private String location;
+    private String profileImageUrl;
 
-    public UserProfile(User user, String phoneNumber, String avatarUrl, String bio) {
-        this.user = user;
+    public UserProfile(UUID userId, String displayName, String phoneNumber, String bio, String location, String profileImageUrl) {
+        this.userId = userId;
+        this.displayName = displayName;
         this.phoneNumber = phoneNumber;
-        this.avatarUrl = avatarUrl;
         this.bio = bio;
+        this.location = location;
+        this.profileImageUrl = profileImageUrl;
     }
 
 }

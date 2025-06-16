@@ -7,8 +7,10 @@ import lombok.Setter;
 @Setter
 public class UserProfileRequest {
 
+    private String displayName;
     private String phoneNumber;
-    private String avatarUrl;
+    private String profileImageUrl;
+    private String location;
     private String bio;
 
 }
