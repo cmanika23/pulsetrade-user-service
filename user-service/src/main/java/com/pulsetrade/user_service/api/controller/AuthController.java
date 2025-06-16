@@ -6,12 +6,11 @@ import com.pulsetrade.user_service.api.dto.RegisterRequest;
 import com.pulsetrade.user_service.application.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/auth")
@@ -31,5 +30,9 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getMe(Authentication authentication){
+        return ResponseEntity.ok("Logged in user ID: " + authentication.getName());
+    }
 
 }

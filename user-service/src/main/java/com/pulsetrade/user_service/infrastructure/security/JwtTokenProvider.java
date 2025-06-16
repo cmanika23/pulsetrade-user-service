@@ -1,6 +1,7 @@
 package com.pulsetrade.user_service.infrastructure.security;
 
 import com.pulsetrade.user_service.domain.model.User;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
@@ -37,5 +38,24 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
+
+    public boolean validateToken(String token){
+        try{
+            Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e){
+            return false;
+        }
+    }
+
+    public String getUserId(String token){
+        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getRole(String token){
+        return (String) Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("role");
+    }
+
+
 
 }
