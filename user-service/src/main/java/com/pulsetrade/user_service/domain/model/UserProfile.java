@@ -31,5 +31,11 @@ public class UserProfile {
     @Column(name = "bio")
     private String bio;
 
+    public UserProfile(User user, String phoneNumber, String avatarUrl, String bio) {
+        this.user = user;
+        this.phoneNumber = phoneNumber;
+        this.avatarUrl = avatarUrl;
+        this.bio = bio;
+    }
 
 }
